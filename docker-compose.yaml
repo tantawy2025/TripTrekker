@@ -1,0 +1,27 @@
+services:
+  postgres-db:
+    image: postgres:latest
+    container_name: docker-db
+    environment:
+      - POSTGRES_PASSWORD: postgres
+      - POSTGRES_USER: postgres
+      - PGPORT: 5434
+    ports:
+      - "5434:5434"
+    volumes:
+      - F:\\MONITORSHIP\\projects\\docker-db:/var/lib/postgresql/data
+    restart: always
+
+  backend:
+    build: .
+    container_name: app_con
+    ports:
+      - 8081:8081
+    environment:
+      - db_url: jdbc:postgresql://postgres-db:5434/triptekker
+      - db_username: postgres
+      - db_password: postgres
+
+    depends_on:
+      - postgres-db
+    restart: always
